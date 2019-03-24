@@ -4,22 +4,22 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
     static final int SETTINGS_REQUEST = 1000;
-    SeekBar simpleSeekBar;
+    private static int savedProgress = 500;
+    private SeekBar speedSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        simpleSeekBar = findViewById(R.id.speed);
+        speedSlider = findViewById(R.id.speed);
 
-        simpleSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        speedSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -27,19 +27,31 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // Auto-generated method
+                // Unused
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(SettingsActivity.this, "Seek bar progress is:" +
-                simpleSeekBar.getProgress(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, "Speed set to: " +
+                speedSlider.getProgress(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        savedProgress = speedSlider.getProgress();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        speedSlider.setProgress(savedProgress);
+    }
+
     public void doneClicked(View view) {
         Intent intent = new Intent();
-        intent.putExtra("speed", simpleSeekBar.getProgress());
+        intent.putExtra("speed", speedSlider.getProgress());
         setResult(RESULT_OK, intent);
         finish();
     }
