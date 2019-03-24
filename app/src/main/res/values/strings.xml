@@ -4,5 +4,7 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="settings">Settings</string>
+    <string name="speed">speed</string>
+    <string name="done">done</string>
 
 </resources>

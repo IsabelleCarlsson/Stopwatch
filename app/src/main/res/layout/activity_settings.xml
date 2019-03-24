@@ -3,18 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <SeekBar
+        android:id="@+id/speed"
+        android:layout_margin="40sp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="speed" />
+        android:max="1000"
+        android:progress="500"/>
 
-    <!--<Button-->
-        <!--android:text="done"-->
-        <!--android:onClick="doneClicked"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content" />-->
+    <Button
+        android:text="@string/done"
+        android:onClick="doneClicked"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </android.support.v7.widget.LinearLayoutCompat>
