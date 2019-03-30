@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class StopwatchActivity extends AppCompatActivity {
     private Handler handler;
     private boolean isRunning;
@@ -16,6 +18,7 @@ public class StopwatchActivity extends AppCompatActivity {
     private Button toggle;
     private TextView display;
     private int speed;
+    private boolean wasRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +32,10 @@ public class StopwatchActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             stopwatch = new Stopwatch();
         } else {
-            stopwatch = new Stopwatch(savedInstanceState.getInt("hours"),
-                                      savedInstanceState.getInt("minutes"),
-                                      savedInstanceState.getInt("seconds"));
+            stopwatch = new Stopwatch(Objects.requireNonNull(savedInstanceState.getString("display")));
             boolean running = savedInstanceState.getBoolean("running");
             speed = savedInstanceState.getInt("speed");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
             if (running) {
                 enableStopwatch();
             }
@@ -44,17 +46,16 @@ public class StopwatchActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("hours", stopwatch.getHours());
-        outState.putInt("minutes", stopwatch.getMinutes());
-        outState.putInt("seconds", stopwatch.getSeconds());
+        outState.putString("display", stopwatch.toString());
         outState.putBoolean("running", isRunning);
         outState.putInt("speed", speed);
+        outState.putBoolean("wasRunning", wasRunning);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isRunning) {
+        if (wasRunning) {
             enableStopwatch();
         }
     }
@@ -62,7 +63,10 @@ public class StopwatchActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        disableStopwatch();
+        wasRunning = isRunning;
+        if (wasRunning) {
+            disableStopwatch();
+        }
     }
 
     public void settingsClicked(View view) {
@@ -77,7 +81,7 @@ public class StopwatchActivity extends AppCompatActivity {
         if (requestCode == SettingsActivity.SETTINGS_REQUEST) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    speed = data.getIntExtra("speed", 500);
+                    speed = data.getIntExtra("speed", 1000);
                 }
             }
         }
