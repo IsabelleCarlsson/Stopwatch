@@ -13,22 +13,11 @@ public class Stopwatch {
         seconds = 0;
     }
 
-    public Stopwatch(int hours, int minutes, int seconds) {
-        this.hours = hours;
-        this.minutes = minutes;
-        this.seconds = seconds;
-    }
-
-    public int getHours() {
-        return hours;
-    }
-
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public int getSeconds() {
-        return seconds;
+    public Stopwatch(String display) {
+        String[] displayParts = display.split(":");
+        this.hours = Integer.parseInt(displayParts[0]);
+        this.minutes = Integer.parseInt(displayParts[1]);
+        this.seconds = Integer.parseInt(displayParts[2]);
     }
 
     public void tick() {
